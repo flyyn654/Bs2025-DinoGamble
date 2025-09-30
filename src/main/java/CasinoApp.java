@@ -56,13 +56,13 @@ public class CasinoApp extends JFrame {
 
     // ================= BLACKJACK =================
     static class BlackjackPanel extends JPanel {
-        private JButton hitButton, standButton, newGameButton;
+        private final JButton hitButton;
+        private final JButton standButton;
         private List<Card> playerCards;
         private List<Card> dealerCards;
-        private Random rand = new Random();
-        private CasinoApp app;
+        private final Random rand = new Random();
         private int bet;
-        private JTextField betField;
+        private final JTextField betField;
         private boolean gameOver;
 
         private final String[] cardNames = {
@@ -73,7 +73,6 @@ public class CasinoApp extends JFrame {
         public BlackjackPanel(CasinoApp app) {
             playerCards = new ArrayList<>();
             dealerCards = new ArrayList<>();
-            this.app = app;
             setLayout(new BorderLayout());
 
             JPanel bottomPanel = new JPanel();
@@ -83,7 +82,7 @@ public class CasinoApp extends JFrame {
 
             hitButton = new JButton("Hit");
             standButton = new JButton("Stand");
-            newGameButton = new JButton("New Game");
+            JButton newGameButton = new JButton("New Game");
 
             bottomPanel.add(hitButton);
             bottomPanel.add(standButton);
@@ -287,6 +286,7 @@ public class CasinoApp extends JFrame {
         }
 
         private void startRace() {
+            raceStatus = true;
             try {
                 bet = Integer.parseInt(betField.getText());
             } catch (NumberFormatException e) {
@@ -297,7 +297,7 @@ public class CasinoApp extends JFrame {
                 return;
             }
 
-            Arrays.fill(dinoX, 50);
+            Arrays.fill(dinoX,50);
             resultLabel.setText("Race started! You bet on: " + betBox.getSelectedItem());
             raceTimer.start();
             repaint();
@@ -321,7 +321,7 @@ public class CasinoApp extends JFrame {
             }
             repaint();
         }
-
+        static boolean raceStatus = false;
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -334,6 +334,11 @@ public class CasinoApp extends JFrame {
                 g.setColor(new Color(240, 250, 240));
                 g.fillRect(0, 0, getWidth(), getHeight());
             }
+            if (raceStatus) {
+                g.setColor(Color.WHITE);
+                g.fillRect(finishLine + 95, 0, 20, getHeight());
+            }
+
 
             for (int i = 0; i < dinoX.length; i++) {
                 java.net.URL dinoUrl = getClass().getResource("/racedesigns/dino" + (i + 1) + ".png");
@@ -348,8 +353,7 @@ public class CasinoApp extends JFrame {
                 }
             }
 
-            g.setColor(Color.WHITE);
-            g.drawLine(finishLine, 200, finishLine, getHeight());
+
         }
     }
 
