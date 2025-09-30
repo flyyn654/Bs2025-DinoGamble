@@ -1,17 +1,20 @@
 package main.java;
 
+import org.w3c.dom.css.RGBColor;
+
 import javax.swing.*;
 import javax.swing.Timer;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+
+
 public class CasinoApp extends JFrame {
     CardLayout cardLayout;
     JPanel mainPanel;
     static int credits = 500;
-    JLabel creditLabel;
-
+    static JLabel creditLabel;
     public CasinoApp() {
         setTitle("Casino App - Dino Casino");
         setSize(1000, 700);
@@ -21,8 +24,6 @@ public class CasinoApp extends JFrame {
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
 
-        creditLabel = new JLabel("Credits: " + credits);
-        creditLabel.setFont(new Font("Arial", Font.BOLD, 16));
 
         BlackjackPanel blackjackPanel = new BlackjackPanel(this);
         DinoRacePanel dinoRacePanel = new DinoRacePanel(this);
@@ -43,7 +44,6 @@ public class CasinoApp extends JFrame {
         gameMenu.add(dinoRaceItem);
         menuBar.add(gameMenu);
         menuBar.add(Box.createHorizontalStrut(20));
-        menuBar.add(creditLabel);
         setJMenuBar(menuBar);
 
         add(mainPanel);
@@ -75,18 +75,33 @@ public class CasinoApp extends JFrame {
             dealerCards = new ArrayList<>();
             setLayout(new BorderLayout());
 
-            JPanel bottomPanel = new JPanel();
+            JPanel bottomPanel = new JPanel(new GridLayout(1,3,8,0));
+            JPanel left = util.createPanel();
+            JPanel middle = util.createPanel();
+            JPanel right = util.createPanel();
+
+            creditLabel = new JLabel("Credits: " + credits);
+            creditLabel.setBounds(20, 60, 500, 25);
+            creditLabel.setFont(new Font("Arial", Font.BOLD, 20));
+            creditLabel.setForeground(Color.GREEN);
+            left.add(creditLabel);
+
             betField = new JTextField("50", 5);
-            bottomPanel.add(new JLabel("Bet:"));
-            bottomPanel.add(betField);
+            middle.add(new JLabel("Bet:"));
+            middle.add(betField);
 
             hitButton = new JButton("Hit");
             standButton = new JButton("Stand");
             JButton newGameButton = new JButton("New Game");
 
-            bottomPanel.add(hitButton);
-            bottomPanel.add(standButton);
-            bottomPanel.add(newGameButton);
+            middle.add(hitButton);
+            middle.add(standButton);
+            right.add(newGameButton);
+
+            bottomPanel.add(left);
+            bottomPanel.add(middle);
+            bottomPanel.add(right);
+
             add(bottomPanel, BorderLayout.SOUTH);
 
             disableButtons();
@@ -258,32 +273,50 @@ public class CasinoApp extends JFrame {
         public DinoRacePanel(CasinoApp app) {
             this.app = app;
             setLayout(null);
-
-            String[] dinos = {"Dino 1", "Dino 2", "Dino 3"};
-            betBox = new JComboBox<>(dinos);
-            betBox.setBounds(20, 20, 100, 30);
-            add(betBox);
-
-            betField = new JTextField("50");
-            betField.setBounds(140, 20, 60, 30);
-            add(betField);
-
-            startRaceButton = new JButton("Start Race");
-            startRaceButton.setBounds(220, 20, 120, 30);
-            add(startRaceButton);
+            setLayout(new BorderLayout());
+            JPanel bottomPanel = new JPanel(new GridLayout(1,3,8,0));
+            JPanel left = util.createPanel();
+            JPanel middle = util.createPanel();
+            JPanel right = util.createPanel();
 
             resultLabel = new JLabel("Place your bet!");
-            resultLabel.setBounds(20, 60, 500, 30);
-            resultLabel.setFont(new Font("Arial", Font.BOLD, 16));
-            resultLabel.setForeground(Color.WHITE);
+            resultLabel.setBounds(20, 60, 500, 25);
+            resultLabel.setFont(new Font("Arial", Font.BOLD, 20));
+            resultLabel.setForeground(Color.BLACK);
+            middle.add(resultLabel);
 
-            add(resultLabel);
+            creditLabel = new JLabel("Credits: " + credits);
+            creditLabel.setBounds(20, 60, 500, 25);
+            creditLabel.setFont(new Font("Arial", Font.BOLD, 20));
+            creditLabel.setForeground(Color.GREEN);
+            left.add(creditLabel);
+
+            betField = new JTextField("50");
+            betField.setColumns(3);
+            betField.setBounds(140, 20, 60, 25);
+            middle.add(betField);
+
+            String[] dinos = {"T-Rex", "Triceratops", "Parasaur"};
+            betBox = new JComboBox<>(dinos);
+            betBox.setBounds(20, 20, 100, 25);
+            middle.add(betBox);
+
+            startRaceButton = new JButton("Start Race");
+            startRaceButton.setBounds(220, 20, 120, 25);
+            right.add(startRaceButton);
+
+            bottomPanel.add(left);
+            bottomPanel.add(middle);
+            bottomPanel.add(right);
+
+            add(bottomPanel, BorderLayout.SOUTH);
 
             dinoX = new int[dinos.length];
             raceTimer = new Timer(100, e -> moveDinos());
 
             startRaceButton.addActionListener(e -> startRace());
         }
+
 
         private void startRace() {
             raceStatus = true;
@@ -308,8 +341,23 @@ public class CasinoApp extends JFrame {
                 dinoX[i] += rand.nextInt(20);
                 if (dinoX[i] >= finishLine) {
                     raceTimer.stop();
-                    String winner = "Dino " + (i + 1);
-                    resultLabel.setText(winner + " wins! You bet on: " + betBox.getSelectedItem());
+                    String winner;
+                    switch (i) {
+                        case 0:
+                            resultLabel.setText("T-Rex wins! You bet on: " + betBox.getSelectedItem());
+                            winner = "T-Rex";
+                            break;
+                        case 1:
+                            resultLabel.setText("Triceratops wins! You bet on: " + betBox.getSelectedItem());
+                            winner = "Triceratops";
+                            break;
+                        case 2:
+                            resultLabel.setText("Parasaur wins! You bet on: " + betBox.getSelectedItem());
+                            winner = "Parasaur";
+                            break;
+                        default:
+                            winner = " ";
+                    }
                     if (betBox.getSelectedItem().equals(winner)) {
                         app.updateCredits(bet);
                     } else {
