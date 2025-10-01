@@ -185,10 +185,10 @@ public class CasinoApp extends JFrame {
             //Wenn der Knopf close gedrückt wird wird das Frame geschlossen
 
             standButton.addActionListener(e -> {
-                while (getTotal(dealerCards) < 18) {
+                while (getTotal(dealerCards) < 17) {
                     dealerCards.add(drawCard());
                 }
-                //Wenn Knopf stand geklickt wird zieht der dealer Karten solange sein Wert kleiner als 18 ist
+                //Wenn Knopf stand geklickt wird zieht der dealer Karten solange sein Wert kleiner als 17 ist
                 repaint();
                 //Das Frame wird neu gezeichnet
                 int playerTotal = getTotal(playerCards);
