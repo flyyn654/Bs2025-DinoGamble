@@ -1,0 +1,37 @@
+CasinoApp - Spielablaufübersicht
+
+1. **Allgemeines**
+
+* Startet ein Fenster mit 1000x700 Pixel.
+* Statische Credits: 500
+* Zwei Spiele verfügbar: Blackjack und Dino Races.
+* Menüleiste zur Auswahl zwischen Spielen.
+
+2. **Blackjack Panel**
+
+* **Start Game Button**: Initialisiert neue Karten, Spieler und Dealer erhalten je 2 Karten, aktiviert Hit und Stand Buttons.
+* **Hit Button**: Spieler zieht eine Karte, wenn Gesamtwert > 21 -> Busted, Spieler verliert.
+* **Stand Button**: Dealer zieht Karten bis 17+, Gewinner wird bestimmt, Credits angepasst.
+* **Quit Button**: Schließt das Programm.
+* **Bet Field**: Spieler gibt Einsatz ein, der Einsatz darf nicht 0 oder höher als Credits sein.
+* **Kartenanzeige**: Zeigt Spieler- und Dealerkarten graphisch, lädt Bilder oder zeigt Platzhalter.
+
+3. **Dino Races Panel**
+
+* **Start Race Button**: Beginnt Rennen, setzt Dinos auf Startposition, Timer startet.
+* **Bewegung der Dinos**: Timer erhöht X-Position zufällig, bei Erreichen Ziellinie wird Rennen gestoppt, Gewinner überprüft, Credits angepasst.
+* **Bet ComboBox**: Auswahl auf welchen Dino gesetzt wird.
+* **Bet Field**: Spieler gibt Einsatz ein, gleiche Validierung wie bei Blackjack.
+* **Quit Button**: Beendet das Programm.
+* **Graphische Darstellung**: Dinos werden als Bilder oder Platzhalter angezeigt, Ziellinie wird gezeichnet.
+
+4. **Creditsverwaltung**
+
+* `updateCredits(int change)`: Erhöht oder vermindert Credits, aktualisiert Label.
+
+5. **Allgemeines GUI Verhalten**
+
+* BorderLayout: Panels werden in NORTH, SOUTH, CENTER, EAST, WEST angeordnet.
+* GridLayout: Unterpanel wird in 1 Reihe, 3 Spalten aufgeteilt.
+* Buttons werden aktiviert/deaktiviert abhängig vom Spielstatus.
+* PaintComponent: Zeichnet Hintergrund, Karten oder Dinos, aktualisiert GUI nach jedem Schritt.
